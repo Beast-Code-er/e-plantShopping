@@ -10,7 +10,7 @@ function ProductList({ onHomeClick }) {
     const dispatch = useDispatch();
     const [showCart, setShowCart] = useState(false);
     const [showPlants, setShowPlants] = useState(false); // State to control the visibility of the About Us page
-    const [addedToCart, setAddedToCart]= useState({});
+    const [addedToCart, setAddedToCart] = useState({});
 
 
     const plantsArray = [
@@ -265,11 +265,11 @@ function ProductList({ onHomeClick }) {
     };
 
 
-    const handleAddToCart=(plant)=>{
-        dispatch(addItem(product));
-        setAddedToCart((prevState)=>({
+    const handleAddToCart = (plant) => {
+        dispatch(addItem(plant));
+        setAddedToCart((prevState) => ({
             ...prevState,
-            [product.name]:true,
+            [plant.name]: true,
         }))
     }
 
@@ -297,23 +297,36 @@ function ProductList({ onHomeClick }) {
             </div>
             {!showCart ? (
                 <div className="product-grid">
-                    {plantsArray.map((category, index)=>(
+                    {plantsArray.map((category, index) => (
                         <div key={index}>
                             <h1>
                                 <div>{category.category}</div>
                             </h1>
                             <div className='product-list'>
-                                {category.plants.map((plant,plantIndex)=>(
+                                {category.plants.map((plant, plantIndex) => (
                                     <div className='product-card' key={plantIndex}>
                                         <img
-                                        className='product-image'
-                                        src={plant.image}
-                                        alt={plant.name}
+                                            className='product-image'
+                                            src={plant.image}
+                                            alt={plant.name}
                                         />
                                         <div className='product-title'>{plant.name}</div>
                                         <div className='product-description'>{plant.description}</div>
-                                        <div className='product-cost'>${plant.cost}</div>
-                                        <button className='product-button' onClick={()=>{handleAddToCart(plant)}}>Add to Cart</button>
+                                        <div className='product-cost'>{plant.cost}</div>
+                                        {(() => {
+                                            const cart = useSelector(state => state.cart.items);
+                                            const isInCart = cart.some(item => item.name === plant.name && item.quantity > 0);
+                                            return (
+                                                <button
+                                                className='product-button'
+                                                onClick={() => handleAddToCart(plant)}
+                                                disabled={isInCart}
+                                              >
+                                                {isInCart ? 'Added to Cart' : 'Add to Cart'}
+                                              </button>
+                                            );
+                                        })()}
+
                                     </div>
                                 ))}
                             </div>
