@@ -126,7 +126,10 @@ body {
   background-color: gray;
   cursor: not-allowed;
 }
-
+.product-button:disabled:hover{
+    background-color: gray;
+    cursor: not-allowed;
+}
 .tag_home_link{
     display: flex;
     /* background-color: red; */
